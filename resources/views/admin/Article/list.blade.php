@@ -13,12 +13,13 @@
                         <!-- <p class="card-category"> {{ trans('Here is a List for Question-Answer')}}</p> -->
                     </div>
                     <div class="card-body">
+                        <input type="text" name="email" class="form-control searchEmail" placeholder="Search for Email Only..."><br>
                         <div class="table-responsive">
                             {!! $dataTable->table()!!}
                         </div>
                     </div>
                 </div>
-                
+
 
             </div>
         </div>
@@ -28,9 +29,9 @@
 @push('js')
 <script>
     // ---------------------------------------status-----------------------------
-    $(document).on('click','.status', function(){
+    $(document).on('click', '.status', function() {
         var id = $(this).data('id');
-        var number = $(this).attr('id','asd');
+        var number = $(this).attr('id', 'asd');
         $.ajax({
             url: "{{route('admin.status_article')}}",
             type: 'get',
@@ -38,12 +39,11 @@
                 id: id,
             },
             dataType: "json",
-            success: function(data){
+            success: function(data) {
                 $("#asd").removeAttr("class");
-                if(data.status == "Active")
-                {
+                if (data.status == "Active") {
                     $("#asd").addClass("badge rounded-pill bg-success status");
-                }else{
+                } else {
                     $("#asd").addClass("badge rounded-pill bg-danger status");
                 }
                 $("#asd").html(data.status);
@@ -52,38 +52,40 @@
         })
     });
     // ---------------------------------------Delete-----------------------------
-    $(document).on('click','.delete', function(){
+    $(document).on('click', '.delete', function() {
         swal({
-        title: "Are you sure?",
-        text: "Once deleted, you will not be able to recover this imaginary file!",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-        })
-        .then((willDelete) => {
-        if (willDelete) {
-            var delet = $(this).data('id');
-            var url = '{{route("admin.delete_article", ":queryId")}}';
-            url = url.replace(':queryId', delet);
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {
-                    id: delet,
-                    _token: '{{ csrf_token() }}'
-                },
-                dataType: "json",
-                success: function(data){
-                    $('#articlelistdatatable-table').DataTable().ajax.reload();
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this imaginary file!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    var delet = $(this).data('id');
+                    var url = '{{route("admin.delete_article", ":queryId")}}';
+                    url = url.replace(':queryId', delet);
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            id: delet,
+                            _token: '{{ csrf_token() }}'
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            $('#articlelistdatatable-table').DataTable().ajax.reload();
+                        }
+                    });
+                    swal("Poof! Your imaginary file has been deleted!", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("Your imaginary file is safe!");
                 }
             });
-        swal("Poof! Your imaginary file has been deleted!", {
-        icon: "success",
-        });
-        } else {
-        swal("Your imaginary file is safe!");
-        }
-        });
+
+       
     });
 </script>
 {!! $dataTable->scripts() !!}

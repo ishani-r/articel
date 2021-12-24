@@ -17,7 +17,7 @@ class ArticelController extends Controller
         $category = Category::all();
         return view('admin.Article.create', compact('category'));
     }
-    
+
     public function create(Request $request)
     {
         $data = new Artical();
@@ -39,18 +39,18 @@ class ArticelController extends Controller
         $data = Artical::find($id);
         $category = Category::where('id', $data->category_id)->first();
         $subcategory = Subcategory::where('id', $data->subcategory_id)->first();
-        return view('admin.Article.show', compact('data','category','subcategory'));
+        return view('admin.Article.show', compact('data', 'category', 'subcategory'));
     }
-    
+
     public function edit($id)
     {
         $data = Artical::find($id);
         $categorys = Category::get();
         $subcategorys = Subcategory::get();
-        return view('admin.Article.edit', compact('data','categorys','subcategorys'));
+        return view('admin.Article.edit', compact('data', 'categorys', 'subcategorys'));
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
         $data = Artical::find($id);
         $data->category_id = $request->categorys_id;
@@ -71,11 +71,10 @@ class ArticelController extends Controller
     {
         $id = $request['id'];
         $data = Artical::find($id);
-        
-        if($data->status == "Active")
-        {
+
+        if ($data->status == "Active") {
             $data->status = "Deactive";
-        }else{
+        } else {
             $data->status = "Active";
         }
         $data->save();
@@ -92,13 +91,14 @@ class ArticelController extends Controller
     public function countLike()
     {
         $artical = Artical::all();
-        return view('admin.Like.count-like',compact('artical'));
+        return view('admin.Like.count-like', compact('artical'));
     }
-    
+
     public function showComment()
     {
         $comment = Comment::all();
-        return view('admin.Like.comment',compact('comment'));
+        return view('admin.Like.comment', compact('comment'));
     }
 
+    
 }

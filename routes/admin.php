@@ -22,7 +22,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::post('delete-article/{id}','Auth\ArticelController@deleteArticle')->name('delete_article'); 
     Route::get('articel-list',        'Auth\ArticelController@list')->name('articel_list');
     Route::get('show-comment',        'Auth\ArticelController@showComment')->name('show_comment');
-    
+
+    Route::get('users', ['uses'=>'Auth\SearchController@index', 'as'=>'users.index']);
+    // Route::get('users', 'Auth\SearchController@index')->name('users_index');
     
     Route::post('set-sub',        'Auth\ArticelController@setSubcategory')->name('set_sub');
 

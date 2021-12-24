@@ -14,9 +14,11 @@ class CreateArticalsTable extends Migration
     public function up()
     {
         Schema::create('articals', function (Blueprint $table) {
-            $table->id();
-            $table->string('category_id');
-            $table->string('subcategory_id');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->unsignedBigInteger('subcategory_id');
+            $table->foreign('subcategory_id')->references('id')->on('subcategories')->onDelete('cascade');
             $table->longText('article');
             $table->string('status');
             $table->timestamps();

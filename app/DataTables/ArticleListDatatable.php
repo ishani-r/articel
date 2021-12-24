@@ -24,20 +24,19 @@ class ArticleListDatatable extends DataTable
         return datatables()
             ->eloquent($query)
             // ->addColumn('action', 'articlelistdatatable.action');
-            ->addColumn('action', function($data){
+            ->addColumn('action', function ($data) {
                 $result = '<div class="btn-group">';
-                $result .= '<a href="'.route('admin.show_article',$data->id).'"><button class="btn-sm btn-outline-warning" style="border-radius: 2.1875rem;"><i class="fa fa-eye" aria-hidden="true"></i></button></a>';
-                $result .= '<a href="'.route('admin.edit_article',$data->id).'"><button class="btn-sm btn-outline-info" style="border-radius: 2.1875rem;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>';
-                $result .= '<button type="submit" data-id="'.$data->id.'" class="btn-sm btn-outline-danger delete" style="border-radius: 2.1875rem;"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                $result .= '<a href="' . route('admin.show_article', $data->id) . '"><button class="btn-sm btn-outline-warning" style="border-radius: 2.1875rem;"><i class="fa fa-eye" aria-hidden="true"></i></button></a>';
+                $result .= '<a href="' . route('admin.edit_article', $data->id) . '"><button class="btn-sm btn-outline-info" style="border-radius: 2.1875rem;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>';
+                $result .= '<button type="submit" data-id="' . $data->id . '" class="btn-sm btn-outline-danger delete" style="border-radius: 2.1875rem;"><i class="fa fa-trash" aria-hidden="true"></i></button>';
                 return $result;
             })
-            
+
             ->editColumn('status', function ($data) {
-                if($data['status'] == 'Active')
-                {
-                    return '<button type="button" data-id="'.$data->id.'" class="badge rounded-pill bg-success status"> Active </button>';
-                }else{
-                    return '<button type="button" data-id="'.$data->id.'" class="badge rounded-pill bg-danger status"> Deactive </button>';
+                if ($data['status'] == 'Active') {
+                    return '<button type="button" data-id="' . $data->id . '" class="badge rounded-pill bg-success status"> Active </button>';
+                } else {
+                    return '<button type="button" data-id="' . $data->id . '" class="badge rounded-pill bg-danger status"> Deactive </button>';
                 }
             })
 
@@ -51,7 +50,16 @@ class ArticleListDatatable extends DataTable
                 return $data->name;
             })
 
-            ->rawColumns(['action','status'])
+            ->filterColumn('category_id', function ($data, $keyword) {
+                $sql = "categories.name like ?";
+                $data->whereRaw($sql, ["%{$keyword}%"]);
+            })
+            ->filterColumn('subcategory_id', function ($data, $keyword) {
+                $sql = "subcategories.name like ?";
+                $data->whereRaw($sql, ["%{$keyword}%"]);
+            })
+
+            ->rawColumns(['action', 'status'])
             ->addIndexColumn();
     }
 
@@ -63,7 +71,13 @@ class ArticleListDatatable extends DataTable
      */
     public function query(Artical $model)
     {
-        return $model->newQuery();
+        $model = $model
+            ->join('categories', 'categories.id', '=', 'articals.category_id')
+            ->join('subcategories', 'subcategories.id', '=', 'articals.subcategory_id')
+            ->select('articals.*', 'categories.name', 'subcategories.name')
+            ->newQuery();
+        return $model->with(['category', 'subcategory'])->newQuery();
+        // return $model->newQuery();
     }
 
     /**
@@ -74,18 +88,18 @@ class ArticleListDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('articlelistdatatable-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Blfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('articlelistdatatable-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Blfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -102,10 +116,10 @@ class ArticleListDatatable extends DataTable
             Column::make('article')->searchable(),
             Column::make('status'),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
         ];
     }
 
