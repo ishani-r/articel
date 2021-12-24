@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Artical;
+use App\Models\Comment;
 use App\Models\Subcategory;
 use App\DataTables\ArticleListDatatable;
 
@@ -93,6 +94,11 @@ class ArticelController extends Controller
         $artical = Artical::all();
         return view('admin.Like.count-like',compact('artical'));
     }
-
+    
+    public function showComment()
+    {
+        $comment = Comment::all();
+        return view('admin.Like.comment',compact('comment'));
+    }
 
 }

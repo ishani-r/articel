@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('article-status',      'Auth\ArticelController@statusArticle')->name('status_article');
     Route::post('delete-article/{id}','Auth\ArticelController@deleteArticle')->name('delete_article'); 
     Route::get('articel-list',        'Auth\ArticelController@list')->name('articel_list');
+    Route::get('show-comment',        'Auth\ArticelController@showComment')->name('show_comment');
     
     
     Route::post('set-sub',        'Auth\ArticelController@setSubcategory')->name('set_sub');

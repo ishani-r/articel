@@ -33,6 +33,12 @@
             <p>{{ trans('Artical Like Status') }}</p>
          </a>
       </li>
+      <li class="nav-item {{ request()->is('*admin/show-comment*') ? 'active' : '' }}">
+         <a class="nav-link" href="{{ route('admin.show_comment') }}">
+            <i class="material-icons">content_paste</i>
+            <p>{{ trans('Show Comments') }}</p>
+         </a>
+      </li>
       <!-- <li class="nav-item {{ request()->is('*list-point*') ? 'active' : '' }}">
          <a class="nav-link" href="">
             <i class="material-icons">person</i>

@@ -2,17 +2,17 @@
 - create category & subcategory seeder -- done
 - Create article crud in admin -- done
   - give subcategory name as autocomplete suggestion when create (use select2 for autocomplete) 
-- article like/dislike & comment by user
-- list article in yajra in admin
+- article like/dislike & comment by user -- done
+- list article in yajra in admin -- done
   - show article detail -- done
-  - show User
-  - show subcategory and their main category
-  - show like count
-  - show comments of that article
+  - show User -- done
+  - show subcategory and their main category -- done
+  - show like count -- done
+  - show comments of that article -- done
   - filter by category & subcategory name
   - filter by user name
-* store only sub_cat id in article
-- create cron job to send mail to user whose account admin inactive
+* store only sub_cat id in article -- done
+- create cron job to send mail to user whose account admin inactive -- done 
 
 
 Ishani Ranpariya
