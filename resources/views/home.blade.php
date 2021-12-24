@@ -8,8 +8,11 @@
    <div class="row justify-content-center">
       <div class="col-md-8">
          <div class="card">
-            <div class="card-header">{{ __('Articles') }}</div>
-
+            <div class="card-header">
+               <div class="text-center">
+                  <h3>{{ __('Articles') }}</h3>
+               </div>
+            </div>
             <div class="card-body">
                @if (session('status'))
                <div class="alert alert-success" role="alert">
@@ -58,8 +61,8 @@
                      $comment = App\Models\Comment::where('artical_id', $name->id)->get();
                      ?>
                      @foreach($comment as $comment)
-                     <?php 
-                     $user = App\Models\User::where('id',$comment->user_id)->first();
+                     <?php
+                     $user = App\Models\User::where('id', $comment->user_id)->first();
                      ?>
                      <tr>
                         {{$user->name}} : {{$comment->comment}}
