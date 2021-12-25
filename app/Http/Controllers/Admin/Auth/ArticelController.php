@@ -9,6 +9,7 @@ use App\Models\Artical;
 use App\Models\Comment;
 use App\Models\Subcategory;
 use App\DataTables\ArticleListDatatable;
+use App\Http\Requests\Admin\ArticleRequest;
 
 class ArticelController extends Controller
 {
@@ -18,7 +19,7 @@ class ArticelController extends Controller
         return view('admin.Article.create', compact('category'));
     }
 
-    public function create(Request $request)
+    public function create(ArticleRequest $request)
     {
         $data = new Artical();
         $data->category_id = $request->category_id;
@@ -99,6 +100,4 @@ class ArticelController extends Controller
         $comment = Comment::all();
         return view('admin.Like.comment', compact('comment'));
     }
-
-    
 }

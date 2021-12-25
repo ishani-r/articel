@@ -1,7 +1,4 @@
 @extends('layouts.app')
-@push('css')
-
-@endpush
 @section('content')
 
 <div class="container">
@@ -97,7 +94,7 @@
                               @enderror
                            </div>
                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-secondary asd" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-primary">Submit</button>
                            </div>
                         </form>
@@ -130,6 +127,16 @@
          unhighlight: function(element, errorClass, validClass) {
             $(element).addClass("is-valid").removeClass("is-invalid");
          },
+      });
+
+      $('.asd').click(function() {
+         $('.error').html('');
+         $('input').removeClass('is-invalid');
+      });
+      $('.close').click(function() {
+         $('.error').html('');
+         $('input').removeClass('is-invalid');
+
       });
 
       $(document).on('click', '.status', function() {

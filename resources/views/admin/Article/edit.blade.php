@@ -1,4 +1,11 @@
 @extends('layouts.master')
+@push('css')
+<style>
+   .error {
+      color: red;
+   }
+</style>
+@endpush
 @section('content')
 <div class="content">
    <div class="container-fluid">
@@ -10,7 +17,7 @@
                   <p class="card-category">{{ trans('You Can Edit Your Article')}}</p>
                </div>
                <div class="card-body">
-                  <form class="forms-sample" method="POST" enctype="multipart/form-data" action="{{ route('admin.update_article',$data->id)}}">
+                  <form class="forms-sample" method="POST" enctype="multipart/form-data" action="{{ route('admin.update_article',$data->id)}}" id="edit_article">
                      @csrf
                      @method('put')
 
@@ -28,8 +35,8 @@
                         </span>
                         @enderror
                      </div>
-                      <!-- Subcategory -->
-                      <div class="form-group">
+                     <!-- Subcategory -->
+                     <div class="form-group">
                         <label for="subcategory_id">Sub Category</label>
                         <select id="subcategory_id" class="btn btn-gradient-primary mr-2 dropdown-toggle form-control @error('subcategory_id') is-invalid @enderror" name="subcategory_id" value="{{ old('subcategory_id') }}">
                            @foreach($subcategorys as $subcategorys)
@@ -79,26 +86,42 @@
 @endsection
 @push('js')
 <script>
-   $(document).ready(function(){
+   $(document).ready(function() {
+      $('#edit_article').validate({
+         rules: {
+            category_id: {
+               required: true,
+            },
+            article: {
+               required: true,
+            }
+         },
+         errorElement: 'span',
+         messages: {
+            category_id: 'Please Select Category.',
+            article: 'Please Write Content Here.',
+         },
+      });
+
       $('#categorys_id').on('change', function() {
-            var categorys_id = this.value;
-            console.log(categorys_id);
-            $.ajax({
-               url: "{{ route('admin.set_sub') }}",
-               type: "POST",
-               data: {
-                  categorys_id: categorys_id,
-                  _token: '{{ csrf_token() }}'
-               },
-               dataType: 'json',
-               success: function(result) {
-                  $('#subcategory_id').html('<option class="dropdown-item" value="">Select Sub Category</option>');
-                  $.each(result, function(key, value) {
-                     $("#subcategory_id").append('<option class="dropdown-item" value="' + value.id + '">' + value.name + '</option>');
-                  });
-               }
-            });
-         })
+         var categorys_id = this.value;
+         console.log(categorys_id);
+         $.ajax({
+            url: "{{ route('admin.set_sub') }}",
+            type: "POST",
+            data: {
+               categorys_id: categorys_id,
+               _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(result) {
+               $('#subcategory_id').html('<option class="dropdown-item" value="">Select Sub Category</option>');
+               $.each(result, function(key, value) {
+                  $("#subcategory_id").append('<option class="dropdown-item" value="' + value.id + '">' + value.name + '</option>');
+               });
+            }
+         });
+      })
    });
 </script>
 @endpush

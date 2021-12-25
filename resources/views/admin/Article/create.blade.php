@@ -26,7 +26,7 @@
                         <div class="col-md-12">
                            <div class="form-group">
                               <label for="category_id">Category</label>
-                              <select id="category_id" class="btn btn-gradient-primary mr-2 dropdown-toggle form-control @error('category_id') is-invalid @enderror" name="category_id" value="{{ old('category_id') }}">
+                              <select id="category_id" class="btn btn-gradient-primary mr-2 dropdown-toggle form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id" value="{{ old('category_id') }}">
                                  <option class="dropdown-item" value="0">select one name</option>
                                  @foreach($category as $categorys)
                                  <option class="dropdown-item" value="{{ $categorys->id }}" {{ $categorys->id == old('category_id') ? 'selected' : '' }}>{{ $categorys->name }}</option>
@@ -86,14 +86,14 @@
                category_id: {
                   required: true,
                },
-               artical: {
+               article: {
                   required: true,
                }
             },
             errorElement: 'span',
             messages: {
                category_id: 'Please Select Category.',
-               artical: 'Please Write Content Here.',
+               article: 'Please Write Content Here.',
             },
          });
 
