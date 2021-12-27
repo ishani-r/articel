@@ -13,21 +13,10 @@ class UserRepository implements UserContract
         $user->name = $array['name'];
         $user->mobile = $array['mobile'];
         $user->email = $array['email'];
-        $user->gender = $array['gender'];
-        $user->dob = $array['dob'];
-        if(isset($array['image']))
-        {
-            $file = $array['image'];
-            $extension = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extension;
-            $file->move('storage/admin/',$filename);
-            $user->image = $filename;
-        }
         $user->password = Hash::make($array['password']);
         $user->status = 'Active';
         $user->slug = $array['name'];
         $user->save();
-        // $user->assignRole('User');
         return $user;
     }
 
@@ -41,22 +30,11 @@ class UserRepository implements UserContract
     {
         $user = User::find($id);
         $user->name = $array['name'];
-        $user->mobile = $array['mobile'];
         $user->email = $array['email'];
-        $user->gender = $array['gender'];
-        $user->dob = $array['dob'];
-        if(isset($array['image']))
-        {
-            $file = $array['image'];
-            $extension = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extension;
-            $file->move('storage/admin/',$filename);
-            $user->image = $filename;
-        }
+        $user->mobile = $array['mobile'];
         $user->password = Hash::make($array['password']);
         $user->status = $array['status'];
-        $user->slug = $array['slug'];
-        
+        $user->slug = $user->name;        
         $user->save();
         return $user;
     }

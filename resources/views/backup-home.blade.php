@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
 <div class="container">
    <div class="row justify-content-center">
       <div class="col-md-8">
@@ -21,6 +22,9 @@
          </br>
          <!-- Display Article -->
          <div class="card">
+            <?php
+            $artical = App\Models\Artical::all();
+            ?>
             @foreach($artical as $name)
             <?php
             $category_name = App\Models\Category::where('id', $name->category_id)->first();
@@ -36,18 +40,16 @@
                $like = App\Models\Like::where('user_id', Illuminate\Support\Facades\Auth::user()->id)->where('article_id', $name->id)->get();
                // dd($like);
                ?>
-               @if($like === ' ')
                @foreach($like as $like)
                @if($like->status == "Like")
                <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-danger status"> Like </button>
                @elseif($like->status == "DisLike")
                <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-success status"> DisLike </button>
-               
                @endif
+               <!-- <button type="button" data-id="{{(empty($like->id)?$name->id:NULL)}}" class="badge rounded-pill bg-success status"> DisLike </button> -->
                @endforeach
-               @else
-               <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-success status"> DisLike </button>
-               @endif
+               
+
                <!-- comment -->
                <div class="text-right">
                   <button type="button" class="btn btn-primary comment" data-id="{{$name->id}}" data-toggle="modal" data-target="#exampleModalCenter">

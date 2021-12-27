@@ -1,9 +1,10 @@
 <?php
 
+use App\Http\Controllers\API\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\LoginController;
-// use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\UserDetailsController;
 use App\Http\Controllers\API\LikeController;
 use App\Http\Controllers\API\PremiumController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\API\HelpController;
 use App\Http\Controllers\API\FollowController;
 use App\Http\Controllers\API\ForgotPasswordController;
 use App\Http\Controllers\API\AuthApiController;
+use App\Http\Controllers\API\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,10 +33,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // -------------------------- User --------------------------
 Route::post('login',                [LoginController::class, 'login']);
-// Route::post('insertuser',           [UserController::class, 'store']);
-// Route::get('showuser/{id?}',        [UserController::class, 'show']);
-// Route::put('updateuser/{id}',       [UserController::class, 'update']);
-// Route::delete('deleteuser/{id}',    [UserController::class, 'destroy']);
+Route::post('insertuser',           [UserController::class, 'store']);
+Route::get('showuser/{id?}',        [UserController::class, 'show']);
+Route::put('updateuser/{id}',       [UserController::class, 'update']);
+Route::delete('deleteuser/{id}',    [UserController::class, 'destroy']);
 
 // ---------------------------------------- Mail ---------------------------------------
 Route::post('sendmail', [ForgotPasswordController::class, 'sendMail']);
@@ -46,6 +48,32 @@ Route::group(['middleware' => 'AuthenticateApi'], function () {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
+
+    // Article
+    Route::get('showArticle/{id?}',    [ArticleController::class, 'showArticle']);
+    // Like
+    Route::post('insertLike',          [LikeController::class, 'likeStatus']); 
+    // Comment
+    Route::post('comment',             [CommentController::class, 'comment'] );
+    Route::get('showComment/{id?}',          [CommentController::class, 'showComment']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // -------------------------- User Detail -------------------------
     Route::post('insertuserdetail', [UserDetailsController::class, 'store']);
     Route::get('showuserdetail/{id?}', [UserDetailsController::class, 'show']);

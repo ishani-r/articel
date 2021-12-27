@@ -17,18 +17,13 @@ class LikeController extends Controller
         $this->Like = $Like;
     }
 
-    public function like(LikeRequest $request)
+    public function likeStatus(Request $request)
     {
-        $like = $this->Like->like($request->all());
+        $like = $this->Like->likeStatus($request->all());
         return response()->json([
-            'message' => 'Like',
+            'message' => 'like inserted/update successfully',   
             'like' => $like
         ]);
     }
 
-    public function showNotification(Request $request)
-    {
-        $like = $this->Like->showNotification($request->all());
-        return $like;
-    }
 }

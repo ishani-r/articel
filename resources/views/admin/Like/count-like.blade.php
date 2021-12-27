@@ -4,52 +4,26 @@
 @extends('layouts.master')
 @section('content')
 <div class="content">
-   <div class="container-fluid">
-      <div class="row">
-         <div class="col-md-12">
-            <div class="card">
-               <div class="card-header card-header-primary">
-                  <h4 class="card-title">{{ trans('Article Table')}}</h4>
-                  <!-- <p class="card-category"> {{ trans('Here is a List for Question-Answer')}}</p> -->
-               </div>
-               <div class="card-body">
-               <table class="table table-dark table-striped">
-                     <thead>
-                        <tr>
-                           <th>No.</th>
-                           <th>Category</th>
-                           <th>Subcategory</th>
-                           <th>Article</th>
-                           <th>Number of Likes</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        @foreach($artical as $artical)
-                        <tr>
-                           <td>{{$artical->id}}</td>
-                           <td>{{$artical->category_id}}</td>
-                           <td>{{$artical->subcategory_id}}</td>
-                           <td>{{$artical->article}}</td>
-                           <?php
-                              $a = $artical->id;
-                              $count = App\Models\Like::whereIn('article_id', [$a])->count();
-                           ?>
-                           <td>{{$count}}</td>
-                        </tr>
-                        @endforeach
-                     </tbody>
-                     <tfoot>
-                        <tr>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-primary">
+                        <h4 class="card-title">{{ trans('Like')}}</h4>
+                        <p class="card-category"> {{ trans('Here is a List for Question-Answer')}}</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive-sg">
+                            {!! $dataTable->table()!!}
+                        </div>
+                    </div>
+                </div>
 
-                        </tr>
-                     </tfoot>
-                  </table>
-               </div>
             </div>
-
-
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 </div>
 @endsection
+@push('js')
+{!! $dataTable->scripts() !!}
+@endpush

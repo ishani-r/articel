@@ -28,9 +28,6 @@ class UserRequest extends FormRequest
             'name' => 'required',
             'email' =>  'required|string|email|max:255|regex:/(.+)@(.+)\.(.+)/i|unique:users',
             'mobile' => 'required|max:10|min:10',
-            'gender' => 'required',
-            'dob' => 'required',
-            'image' => 'required|mimes:jpg,bmp,png',
             'password' => 'required|min:8|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
         ];
     }
@@ -41,9 +38,7 @@ class UserRequest extends FormRequest
             'name.required' => 'Please Enter Your Name.',
             'email.required' => 'Please Enter Your Email Address.',
             'mobile.required' => 'Please Enter Your Mobile Number.',
-            'gender.required' => 'Please Enter Your Gender.',
-            'dob.required' => 'Please Enter Your Birth Date.',
-            'image.required' => 'Please Select Your Profile Picture.',
+            'password.regex' => 'Password should be at least 8 characters in length and should include at least one upper case letter, one number, and one special character.',
         ];
     }
 }

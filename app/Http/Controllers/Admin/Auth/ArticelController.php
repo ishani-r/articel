@@ -9,7 +9,9 @@ use App\Models\Artical;
 use App\Models\Comment;
 use App\Models\Subcategory;
 use App\DataTables\ArticleListDatatable;
+use App\DataTables\CommentDatatable;
 use App\Http\Requests\Admin\ArticleRequest;
+use App\DataTables\CountLikeDatatable;
 
 class ArticelController extends Controller
 {
@@ -89,14 +91,16 @@ class ArticelController extends Controller
         return $sub;
     }
 
-    public function countLike()
+    public function countLike(CountLikeDatatable $CountLikeDatatable)
     {
-        $artical = Artical::all();
-        return view('admin.Like.count-like', compact('artical'));
+        return $CountLikeDatatable->render('admin.Like.count-like');
+        // $artical = Artical::all();
+        // return view('admin.Like.count-like', compact('artical'));
     }
 
-    public function showComment()
+    public function showComment(CommentDatatable $CommentDatatable)
     {
+        // return $CommentDatatable->render('admin.Like.Comment');
         $comment = Comment::all();
         return view('admin.Like.comment', compact('comment'));
     }

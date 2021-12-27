@@ -110,7 +110,7 @@ class ArticleListDatatable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
+            Column::make('id')->data('DT_RowIndex'),
             Column::make('category_id')->searchable(),
             Column::make('subcategory_id')->searchable(),
             Column::make('article')->searchable(),

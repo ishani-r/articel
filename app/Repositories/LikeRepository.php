@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Repositories;
+
 use App\Contracts\LikeContract;
 use App\Models\Like;
 use App\Models\Notification;
@@ -9,45 +11,25 @@ use Illuminate\Support\Facades\DB;
 
 class LikeRepository implements LikeContract
 {
-    public function like(array $array)
+    public function likeStatus(array $array)
     {
-        $like = new Like();
-        $like->user_id = Auth::Guard('api')->user()->id;
-        $like->post_id = $array['post_id'];
-        $like->status = $array['status'];
-        $like->save();
-
-        $notification = new Notification();
-        $notification->sender_user_id = $like->user_id;
-        $notification->title = 'Muzville';
-        $notification->message = $like->status;
-        if($notification->message == 'Like')
-        {
-            $notification->message = 'Like Your Profile';
-            $notification->status = 'Like';
-        } else
-        {
-            $notification->message = 'DisLike Your Profile';
-            $notification->status = 'DisLike';
+        $id = $array['id'];
+        $likes = Like::where('article_id', $id)->where('user_id',Auth::user()->id)->first();
+        
+        if (empty($likes)) {
+            $like = new Like();
+            $like->user_id = Auth::user()->id;
+            $like->article_id = $id;
+            $like->status = "Like"; 
+            $like->save();
+            return $like;
+        } elseif ($likes->status == "Like") {
+            $likes->status = "DisLike";
+        } elseif ($likes->status == "DisLike") {
+            $likes->status = "Like";
         }
-        $notification->reciever_id = $like->post_id;
-        $notification->save();
-        return $notification;
+        $likes->save();
+        return $likes;
     }
 
-    public function showNotification(array $array)
-    {
-        $shownotification = DB::table('notifications')
-        ->select('users.name as sender_user_name','notifications.sender_user_id','notifications.title','notifications.message')
-        ->join('users', 'users.id', '=', 'notifications.sender_user_id')
-        ->where('reciever_id','=',Auth::Guard('api')->user()->id)
-        ->get()->last();
-
-        if($shownotification){
-            return $shownotification;
-        }else{
-            return "No Notifications";
-        }
-    }
 }
-?>
