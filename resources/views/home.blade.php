@@ -56,14 +56,11 @@
                <div class="card">
                   <div class="text-right">
                      <?php
-                     $comment = App\Models\Comment::where('artical_id', $name->id)->get();
+                     $comment = App\Models\Comment::with('user')->where('artical_id', $name->id)->get();
                      ?>
                      @foreach($comment as $comments)
-                     <?php
-                     $user = App\Models\User::where('id', $comments->user_id)->first();
-                     ?>
                      <tr>
-                        {{$comments->comment}}
+                        {{$comments->comment}} : {{$comments->user->name??""}}
                      </tr></br>
                      @endforeach
                   </div>
