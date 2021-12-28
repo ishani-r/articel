@@ -58,12 +58,12 @@
                      <?php
                      $comment = App\Models\Comment::where('artical_id', $name->id)->get();
                      ?>
-                     @foreach($comment as $comment)
+                     @foreach($comment as $comments)
                      <?php
-                     $user = App\Models\User::where('id', $comment->user_id)->first();
+                     $user = App\Models\User::where('id', $comments->user_id)->first();
                      ?>
                      <tr>
-                        {{$user->name}} : {{$comment->comment}}
+                        {{$comments->comment}}
                      </tr></br>
                      @endforeach
                   </div>
