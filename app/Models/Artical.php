@@ -29,4 +29,5 @@ class Artical extends Model
     {
         return $this->hasOne(Subcategory::class, 'id', 'subcategory_id');
     }
+    
 }

@@ -24,7 +24,7 @@ class CountLikeDatatable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'countlikedatatable.action')
+            // ->addColumn('action', 'countlikedatatable.action')
 
             ->editColumn('category_id', function ($data) {
                 $data = Category::where('id', $data->category_id)->first();
@@ -39,7 +39,9 @@ class CountLikeDatatable extends DataTable
             ->editColumn('number_of_likes', function ($data) {
                 $Like = Like::select('id')->where('article_id', $data->id)->pluck('id')->toArray();
                 return count(collect($Like));
-            });
+            })
+            ->rawColumns(['action', 'category_id', 'subcategory_id', 'number_of_likes'])
+            ->addIndexColumn();
     }
 
     /**
@@ -64,7 +66,7 @@ class CountLikeDatatable extends DataTable
             ->setTableId('countlikedatatable-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->dom('Bfrtip')
+            ->dom('Blfrtip')
             ->orderBy(1)
             ->buttons(
                 Button::make('create'),
@@ -83,7 +85,7 @@ class CountLikeDatatable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
+            Column::make('id')->data('DT_RowIndex'),
             Column::make('category_id'),
             Column::make('subcategory_id'),
             Column::make('article'),

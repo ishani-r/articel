@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Artical;
 use App\Models\Comment;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -21,7 +22,19 @@ class CommentDatatable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'commentdatatable.action');
+            ->addColumn('action', 'commentdatatable.action')
+            ->addColumn('comment', function ($data) {
+                $a = "";
+                $comment = Comment::with('user')->where('artical_id', $data->id)->get();
+
+                foreach ($comment as $comments) {
+                    $a .= $comments->user->name . ' : ' . $comments->comment . '<br>';
+                }
+                return $a;
+            })
+
+            ->rawColumns(['action', 'comment'])
+            ->addIndexColumn();
     }
 
     /**
@@ -30,7 +43,7 @@ class CommentDatatable extends DataTable
      * @param \App\Models\CommentDatatable $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Comment $model)
+    public function query(Artical $model)
     {
         return $model->newQuery();
     }
@@ -43,18 +56,18 @@ class CommentDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('commentdatatable-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('commentdatatable-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Blfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -65,15 +78,14 @@ class CommentDatatable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('id'),
-            // Column::make('user_id'),
-            Column::make('artical_id'),
+            Column::make('id')->data('DT_RowIndex'),
+            Column::make('article'),
             Column::make('comment'),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
         ];
     }
 

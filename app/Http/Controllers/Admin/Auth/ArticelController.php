@@ -100,8 +100,8 @@ class ArticelController extends Controller
 
     public function showComment(CommentDatatable $CommentDatatable)
     {
-        // return $CommentDatatable->render('admin.Like.Comment');
-        $comment = Comment::all();
-        return view('admin.Like.comment', compact('comment'));
+        return $CommentDatatable->render('admin.Like.Comment');
+        // $comment = Comment::all();
+        // return view('admin.Like.comment', compact('comment'));
     }
 }

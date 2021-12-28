@@ -41,12 +41,11 @@
                @if($like->status == "Like")
                <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-danger status"> Like </button>
                @elseif($like->status == "DisLike")
-               <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-success status"> DisLike </button>
-               
+               <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-light status"> DisLike </button>
                @endif
                @endforeach
                @else
-               <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-success status"> DisLike </button>
+               <button type="button" data-id="{{$name->id}}" class="badge rounded-pill bg-light  status"> Like </button>
                @endif
                <!-- comment -->
                <div class="text-right">
@@ -105,8 +104,7 @@
                </div>
             </div>
             @endforeach
-
-         </div>
+         </div>   
       </div>
    </div>
 </div>
@@ -143,7 +141,6 @@
 
       $(document).on('click', '.status', function() {
          var id = $(this).data('id');
-         alert(id);
          var number = $(this).attr('id', 'asd');
          $.ajax({
             url: "{{route('like_article')}}",
