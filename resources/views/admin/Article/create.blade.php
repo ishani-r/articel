@@ -26,7 +26,7 @@
                         <div class="col-md-12">
                            <div class="form-group">
                               <label for="category_id">Category</label>
-                              <select id="category_id" class="btn btn-gradient-primary mr-2 dropdown-toggle form-control @error('category_id') is-invalid @enderror" id="category_id" name="category_id" value="{{ old('category_id') }}">
+                              <select id="category_id" class="btn btn-gradient-primary mr-2 dropdown-toggle form-control @error('category_id') is-invalid @enderror category" id="category_id" name="category_id" value="{{ old('category_id') }}">
                                  <option class="dropdown-item" value="0">select one name</option>
                                  @foreach($category as $categorys)
                                  <option class="dropdown-item" value="{{ $categorys->id }}" {{ $categorys->id == old('category_id') ? 'selected' : '' }}>{{ $categorys->name }}</option>
@@ -43,7 +43,7 @@
                      <!-- Subcategory -->
                      <div class="form-group">
                         <label for="subcategory_id">Sub Category</label>
-                        <select id="subcategory_id" class="btn btn-gradient-primary mr-2 dropdown-toggle form-control @error('subcategory_id') is-invalid @enderror" name="subcategory_id" value="{{ old('subcategory_id') }}">
+                        <select id="subcategory_id" class="btn btn-gradient-primary mr-2 dropdown-toggle form-control @error('subcategory_id') is-invalid @enderror subcategory" name="subcategory_id" value="{{ old('subcategory_id') }}">
                            <option class="dropdown-item" value="0">select one subcategory_id</option>
                         </select>
                      </div>
@@ -79,7 +79,16 @@
    @endsection
 
    @push('js')
+<!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />    -->
+   <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
    <script>
+      $(document).ready(function() {
+         $('.category').select2();
+      });
+      $(document).ready(function() {
+         $('.subcategory').select2();
+      });
+
       $(document).ready(function() {
          $('#form_article').validate({
             rules: {

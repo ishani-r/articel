@@ -92,7 +92,7 @@
                               @enderror
                            </div>
                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary asd" data-dismiss="modal">Close</button>
+                              <button type="reset" class="btn btn-secondary asd" data-dismiss="modal">Close</button>
                               <button type="submit" class="btn btn-primary">Submit</button>
                            </div>
                         </form>
@@ -101,7 +101,7 @@
                </div>
             </div>
             @endforeach
-         </div>   
+         </div>
       </div>
    </div>
 </div>
@@ -129,11 +129,12 @@
       $('.asd').click(function() {
          $('.error').html('');
          $('input').removeClass('is-invalid');
+         location.reload();
       });
       $('.close').click(function() {
          $('.error').html('');
          $('input').removeClass('is-invalid');
-
+         location.reload();
       });
 
       $(document).on('click', '.status', function() {

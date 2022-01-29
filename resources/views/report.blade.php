@@ -1,3 +1,4 @@
+
 @if($like != NULL)
 @foreach($like as $like)
 @if($like->status == "Like")
@@ -1251,3 +1252,154 @@ ORDER BY `messages`.`created_at` ASC
    </div>
 </div>
 @endsection
+
+
+
+15/12/2021 - setup/understand and analysis new project
+16/12/2021 - setup admin panal and register/login(start)(individual)
+17/12/2021 - register/login with verify register otp/ validation 
+18/12/2021 - create/list store (manage status) with unique validation
+21/12/2021 - edit/delete store with validation
+
+
+
+
+<?php
+
+namespace App\DataTables;
+
+use App\Models\Seller;
+use App\Models\Store;
+use Yajra\DataTables\Html\Button;
+use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Html\Editor\Editor;
+use Yajra\DataTables\Html\Editor\Fields;
+use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\Auth;
+
+class StoreDatatable extends DataTable
+{
+    /**
+     * Build DataTable class.
+     *
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
+     */
+    public function dataTable($query)
+    {
+        return datatables()
+            ->eloquent($query)
+            // ->addColumn('action', 'storedatatable.action');
+            ->addColumn('action', function ($data) {
+                $action = Store::where('saller_id', Auth::user()->id)->first();
+                if ($action) {
+                    $result = '<div class="btn-group">';
+                    $result .= '<a href="' . route('seller.show_store', $data->id) . '"><button class="btn-sm gradient-purple-bliss" title="store view" style="border-radius: 2.1875rem;"><i class="fa fa-eye" aria-hidden="true"></i></button></a>';
+                    $result .= '<a href="' . route('seller.edit_store', $data->id) . '"><button class="btn-sm gradient-ibiza-sunset" title="store update" style="border-radius: 2.1875rem; "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></a>';
+                    $result .= '<button type="submit" data-id="' . $data->id . '" class="btn-sm gradient-pomegranate delete" title="store delete" style="border-radius: 2.1875rem;"><i class="fa fa-trash" aria-hidden="true"></i></button>';
+                    return $result;
+                }
+            })
+
+            ->editColumn('status', function ($data) {
+                $status = Store::where('saller_id', Auth::user()->id)->pluck('status')->toArray();
+                foreach ($status as $status) {
+                    if ($status == '0') {
+                        return '<button type="button" data-id="' . $data->id . '" class="badge bg-light-success status"><b>Active</b></button>';
+                    } else {
+                        return '<button type="button" data-id="' . $data->id . '" class="badge bg-light-danger status"><b>Deactive</b></button>';
+                    }
+                }
+            })
+
+            ->editColumn('is_approve', function ($data) {
+                $is_approve = Store::where('saller_id', Auth::user()->id)->pluck('is_approve')->toArray();
+                foreach ($is_approve as $is_approve) {
+                    if ($is_approve == '0') {
+                        return '<button type="button" class="badge bg-light-warning approve"><b>Pending</b></button>';
+                    } elseif ($data['is_approve'] == '1') {
+                        return '<button type="button" class="badge bg-light-success"><b>Approve</b></button>';
+                    } else {
+                        return '<button type="button" class="badge bg-light-danger"><b>Rejected</b></button>';
+                    }
+                }
+            })
+
+            ->editColumn('en_name', function ($data) {
+                $en_name = Store::where('saller_id', Auth::user()->id)->pluck('en_name')->toArray();
+                return $en_name;
+            })
+
+            ->editColumn('id', function ($data) {
+                $id = Store::where('saller_id', Auth::user()->id)->pluck('id')->toArray();
+                
+                return $id;
+            })
+
+            ->rawColumns(['action', 'status', 'is_approve'])
+            ->addIndexColumn();
+    }
+
+    /**
+     * Get query source of dataTable.
+     *
+     * @param \App\Models\StoreDatatable $model
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function query(Store $model)
+    {
+        return $model->newQuery();
+    }
+
+    /**
+     * Optional method if you want to use html builder.
+     *
+     * @return \Yajra\DataTables\Html\Builder
+     */
+    public function html()
+    {
+        return $this->builder()
+            ->setTableId('storedatatable-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Blfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
+    }
+
+    /**
+     * Get columns.
+     *
+     * @return array
+     */
+    protected function getColumns()
+    {
+        return [
+            Column::make('id')->data('DT_RowIndex'),
+            Column::make('en_name')->title('Store Name'),
+            Column::make('status'),
+            Column::make('is_approve')->title('Approve'),
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
+        ];
+    }
+
+    /**
+     * Get filename for export.
+     *
+     * @return string
+     */
+    protected function filename()
+    {
+        return 'Store_' . date('YmdHis');
+    }
+}

@@ -31,5 +31,4 @@ class LikeRepository implements LikeContract
         $likes->save();
         return $likes;
     }
-
 }
